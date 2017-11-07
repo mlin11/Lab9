@@ -15,6 +15,7 @@ public class CountOneMerSingleThread
 {
 	public static final File IN_DIR = new File("/Users/mlin8/Fall2017/Prog3/fastaData/adenomasRelease/fasta");
 	private static final Map<Character, Integer> countMap = new HashMap<Character, Integer>();
+	private static int sumA, sumC, sumG, sumT, sumU = 0;
 
 	public static void main(String[] args) throws Exception
 	{
@@ -29,6 +30,7 @@ public class CountOneMerSingleThread
 			{
 				String fastaFile = IN_DIR.getAbsolutePath() + File.separator + s;
 				List<FastaSequence> fastaList = FastaSequence.readFastaFile(fastaFile);
+
 				for (FastaSequence fs : fastaList)
 				{
 					String currentSequence = fs.getSequence();
@@ -36,28 +38,27 @@ public class CountOneMerSingleThread
 					for (int x = 0; x < currentSequence.length(); x++)
 					{
 						char target = currentSequence.charAt(x);
-						if (target == 'A' || target == 'G' || target == 'C' || target == 'T')
-						{
-							Integer count = countMap.get(target);
-							if (count == null)
-								count = 0;
-							count++;
-							countMap.put(target, count);
-						} else
-						{
-							Integer count = countMap.get('U');
-							if (count == null)
-								count = 0;
-							count++;
-							countMap.put('U', count);
-						}
+						if (target == 'A')
+							sumA++;
+						else if (target == 'C')
+							sumC++;
+						else if (target == 'G')
+							sumG++;
+						else if (target == 'T')
+							sumT++;
+						else
+							sumU++;
 					}
 				}
-
 			}
+
 		}
+		countMap.put('A', sumA);
+		countMap.put('C', sumC);
+		countMap.put('G', sumG);
+		countMap.put('T', sumT);
+		countMap.put('U', sumU);
 		System.out.println(countMap);
 		System.out.println((System.currentTimeMillis() - startTime) / 1000f + "seconds");
-
 	}
 }
